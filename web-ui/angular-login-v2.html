@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="loginApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngularJS Login - Enhanced</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .login-wrapper {
+            background: white;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            color: #1e3c72;
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+        
+        .logo p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .alert {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: slideDown 0.3s ease;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+        }
+        
+        input.ng-invalid.ng-touched {
+            border-color: #dc3545;
+        }
+        
+        input.ng-valid.ng-touched {
+            border-color: #28a745;
+        }
+        
+        .error-text {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+        
+        .checkbox-group label {
+            margin: 0;
+            font-weight: normal;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.4);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .links a {
+            color: #1e3c72;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .links a:hover {
+            color: #2a5298;
+            text-decoration: underline;
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #e0e0e0;
+        }
+        
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            color: #999;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper" ng-controller="LoginController">
+        <div class="logo">
+            <h1>Welcome Back</h1>
+            <p>Please login to your account</p>
+        </div>
+        
+        <div class="alert alert-success" ng-show="loginSuccess">
+            <strong>Success!</strong> Welcome, {{user.username}}!
+        </div>
+        
+        <div class="alert alert-error" ng-show="loginError">
+            <strong>Error!</strong> {{errorMessage}}
+        </div>
+        
+        <form name="loginForm" ng-submit="login()" novalidate>
+            <div class="form-group">
+                <label for="username">Username or Email</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        ng-model="user.username" 
+                        placeholder="Enter your username"
+                        required
+                        ng-minlength="3">
+                </div>
+                <span class="error-text" ng-show="loginForm.username.$touched && loginForm.username.$error.required">
+                    Username is required
+                </span>
+                <span class="error-text" ng-show="loginForm.username.$touched && loginForm.username.$error.minlength">
+                    Username must be at least 3 characters
+                </span>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        ng-model="user.password" 
+                        placeholder="Enter your password"
+                        required
+                        ng-minlength="6">
+                </div>
+                <span class="error-text" ng-show="loginForm.password.$touched && loginForm.password.$error.required">
+                    Password is required
+                </span>
+                <span class="error-text" ng-show="loginForm.password.$touched && loginForm.password.$error.minlength">
+                    Password must be at least 6 characters
+                </span>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="remember" ng-model="user.rememberMe">
+                <label for="remember">Remember me</label>
+            </div>
+            
+            <button type="submit" ng-disabled="loginForm.$invalid || isLoading">
+                <span ng-show="!isLoading">Login</span>
+                <span ng-show="isLoading">Logging in...</span>
+            </button>
+        </form>
+        
+        <div class="links">
+            <a href="#" ng-click="forgotPassword()">Forgot Password?</a>
+            <a href="#" ng-click="createAccount()">Create Account</a>
+        </div>
+        
+        <div class="divider">
+            <span>OR</span>
+        </div>
+        
+        <div style="text-align: center; color: #666; font-size: 13px;">
+            <p>Demo credentials: admin / password123</p>
+        </div>
+    </div>
+
+    <script>
+        var app = angular.module('loginApp', []);
+        
+        app.controller('LoginController', function($scope, $timeout) {
+            $scope.user = {
+                username: '',
+                password: '',
+                rememberMe: false
+            };
+            
+            $scope.loginSuccess = false;
+            $scope.loginError = false;
+            $scope.errorMessage = '';
+            $scope.isLoading = false;
+            
+            $scope.login = function() {
+                if ($scope.loginForm.$valid) {
+                    $scope.isLoading = true;
+                    $scope.loginError = false;
+                    
+                    // Simulate API call
+                    $timeout(function() {
+                        // Demo validation
+                        if ($scope.user.username === 'admin' && $scope.user.password === 'password123') {
+                            $scope.loginSuccess = true;
+                            $scope.isLoading = false;
+                            
+                            console.log('Login successful:', {
+                                username: $scope.user.username,
+                                rememberMe: $scope.user.rememberMe
+                            });
+                            
+                            // Reset after 3 seconds
+                            $timeout(function() {
+                                $scope.loginSuccess = false;
+                                $scope.user = {
+                                    username: '',
+                                    password: '',
+                                    rememberMe: false
+                                };
+                                $scope.loginForm.$setPristine();
+                                $scope.loginForm.$setUntouched();
+                            }, 3000);
+                        } else {
+                            $scope.loginError = true;
+                            $scope.errorMessage = 'Invalid username or password';
+                            $scope.isLoading = false;
+                            
+                            $timeout(function() {
+                                $scope.loginError = false;
+                            }, 3000);
+                        }
+                    }, 1500);
+                }
+            };
+            
+            $scope.forgotPassword = function() {
+                alert('Password reset link would be sent to your registered email.');
+            };
+            
+            $scope.createAccount = function() {
+                alert('Redirecting to registration page...');
+            };
+        });
+    </script>
+</body>
+</html>

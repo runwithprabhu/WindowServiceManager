@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="deviceServicesApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Device Services Manager</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            padding: 25px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #dee2e6;
+            border-radius: 25px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-filter {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .btn-filter:hover {
+            background: #dee2e6;
+        }
+        
+        .btn-filter.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-refresh {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-refresh:hover {
+            background: #218838;
+        }
+        
+        .stats {
+            padding: 20px 25px;
+            background: #fff;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .stat-card {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-card.total {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .stat-card.running {
+            background: linear-gradient(135deg, #00e676, #00c853);
+            color: white;
+        }
+        
+        .stat-card.stopped {
+            background: linear-gradient(135deg, #ff5252, #f44336);
+            color: white;
+        }
+        
+        .stat-card h3 {
+            font-size: 36px;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .table-container {
+            padding: 25px;
+            overflow-x: auto;
+        }
+        
+        .services-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .services-table thead {
+            background: #f8f9fa;
+            position: sticky;
+            top: 0;
+        }
+        
+        .services-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .services-table th:hover {
+            background: #e9ecef;
+        }
+        
+        .services-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .services-table tbody tr {
+            transition: all 0.2s;
+        }
+        
+        .services-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-action {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+        
+        .btn-start {
+            background: linear-gradient(135deg, #00e676, #00c853);
+            color: white;
+        }
+        
+        .btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 230, 118, 0.4);
+        }
+        
+        .btn-stop {
+            background: linear-gradient(135deg, #ff5252, #f44336);
+            color: white;
+        }
+        
+        .btn-stop:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 82, 82, 0.4);
+        }
+        
+        .btn-action:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-running {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-stopped {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-other {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            color: #6c757d;
+        }
+        
+        .no-results h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .sort-icon {
+            font-size: 10px;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" ng-controller="ServicesController">
+        <div class="header">
+            <h1>Windows Device Services Manager</h1>
+            <p>Monitor and manage Windows services in real-time</p>
+        </div>
+        
+        <div class="controls">
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    ng-model="searchText" 
+                    placeholder="Search services by name or display name...">
+            </div>
+            
+            <div class="filter-buttons">
+                <button 
+                    class="btn btn-filter" 
+                    ng-class="{active: statusFilter === 'ALL'}"
+                    ng-click="setFilter('ALL')">
+                    All
+                </button>
+                <button 
+                    class="btn btn-filter" 
+                    ng-class="{active: statusFilter === 'RUNNING'}"
+                    ng-click="setFilter('RUNNING')">
+                    Running
+                </button>
+                <button 
+                    class="btn btn-filter" 
+                    ng-class="{active: statusFilter === 'STOPPED'}"
+                    ng-click="setFilter('STOPPED')">
+                    Stopped
+                </button>
+                <button 
+                    class="btn btn-refresh" 
+                    ng-click="refreshServices()">
+                    ↻ Refresh
+                </button>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card total">
+                <h3>{{services.length}}</h3>
+                <p>Total Services</p>
+            </div>
+            <div class="stat-card running">
+                <h3>{{getRunningCount()}}</h3>
+                <p>Running</p>
+            </div>
+            <div class="stat-card stopped">
+                <h3>{{getStoppedCount()}}</h3>
+                <p>Stopped</p>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <div ng-show="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading services...</p>
+            </div>
+            
+            <table class="services-table" ng-show="!loading">
+                <thead>
+                    <tr>
+                        <th ng-click="sortBy('name')">
+                            Service Name
+                            <span class="sort-icon" ng-show="sortColumn === 'name'">
+                                {{sortReverse ? '▼' : '▲'}}
+                            </span>
+                        </th>
+                        <th ng-click="sortBy('displayName')">
+                            Display Name
+                            <span class="sort-icon" ng-show="sortColumn === 'displayName'">
+                                {{sortReverse ? '▼' : '▲'}}
+                            </span>
+                        </th>
+                        <th ng-click="sortBy('status')">
+                            Status
+                            <span class="sort-icon" ng-show="sortColumn === 'status'">
+                                {{sortReverse ? '▼' : '▲'}}
+                            </span>
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="service in filteredServices() | orderBy:sortColumn:sortReverse">
+                        <td>{{service.name}}</td>
+                        <td>{{service.displayName}}</td>
+                        <td>
+                            <span class="status-badge" ng-class="{
+                                'status-running': service.status === 'RUNNING',
+                                'status-stopped': service.status === 'STOPPED',
+                                'status-other': service.status !== 'RUNNING' && service.status !== 'STOPPED'
+                            }">
+                                {{service.status}}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button 
+                                    class="btn-action btn-start" 
+                                    ng-click="startService(service)"
+                                    ng-disabled="service.status === 'RUNNING'">
+                                    Start
+                                </button>
+                                <button 
+                                    class="btn-action btn-stop" 
+                                    ng-click="stopService(service)"
+                                    ng-disabled="service.status === 'STOPPED'">
+                                    Stop
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div ng-show="!loading && filteredServices().length === 0" class="no-results">
+                <h3>No Services Found</h3>
+                <p>Try adjusting your search or filter criteria</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var app = angular.module('deviceServicesApp', []);
+        
+        app.controller('ServicesController', function($scope, $timeout) {
+            $scope.services = [];
+            $scope.searchText = '';
+            $scope.statusFilter = 'ALL';
+            $scope.loading = true;
+            $scope.sortColumn = 'name';
+            $scope.sortReverse = false;
+            
+            // Sample data - Replace with actual service data
+            $scope.loadServices = function() {
+                $scope.loading = true;
+                
+                // Fetch actual service data from REST API
+                fetch('http://localhost:8080/api/services')
+                    .then(response => response.json())
+                    .then(data => {
+                        $scope.$apply(function() {
+                            $scope.services = data;
+                            $scope.loading = false;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error loading services:', error);
+                        alert('Failed to load services. Make sure the REST API server is running on port 8080.');
+                        $scope.$apply(function() {
+                            $scope.loading = false;
+                        });
+                    });
+            };
+            
+            $scope.setFilter = function(filter) {
+                $scope.statusFilter = filter;
+            };
+            
+            $scope.filteredServices = function() {
+                return $scope.services.filter(function(service) {
+                    var matchesSearch = !$scope.searchText || 
+                        service.name.toLowerCase().includes($scope.searchText.toLowerCase()) ||
+                        service.displayName.toLowerCase().includes($scope.searchText.toLowerCase());
+                    
+                    var matchesStatus = $scope.statusFilter === 'ALL' || 
+                        service.status === $scope.statusFilter;
+                    
+                    return matchesSearch && matchesStatus;
+                });
+            };
+            
+            $scope.getRunningCount = function() {
+                return $scope.services.filter(function(s) { 
+                    return s.status === 'RUNNING'; 
+                }).length;
+            };
+            
+            $scope.getStoppedCount = function() {
+                return $scope.services.filter(function(s) { 
+                    return s.status === 'STOPPED'; 
+                }).length;
+            };
+            
+            $scope.refreshServices = function() {
+                $scope.loadServices();
+            };
+            
+            $scope.startService = function(service) {
+                if (confirm('Start service: ' + service.displayName + '?')) {
+                    fetch('http://localhost:8080/api/service/control', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            serviceName: service.name,
+                            action: 'start'
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        $scope.$apply(function() {
+                            if (data.success) {
+                                alert('Success: ' + data.message);
+                                $scope.loadServices();
+                            } else {
+                                alert('Error: ' + data.message);
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        alert('Error: ' + error.message);
+                    });
+                }
+            };
+            
+            $scope.stopService = function(service) {
+                if (confirm('Stop service: ' + service.displayName + '?')) {
+                    fetch('http://localhost:8080/api/service/control', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            serviceName: service.name,
+                            action: 'stop'
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        $scope.$apply(function() {
+                            if (data.success) {
+                                alert('Success: ' + data.message);
+                                $scope.loadServices();
+                            } else {
+                                alert('Error: ' + data.message);
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        alert('Error: ' + error.message);
+                    });
+                }
+            };
+            
+            $scope.sortBy = function(column) {
+                if ($scope.sortColumn === column) {
+                    $scope.sortReverse = !$scope.sortReverse;
+                } else {
+                    $scope.sortColumn = column;
+                    $scope.sortReverse = false;
+                }
+            };
+            
+            // Initial load
+            $scope.loadServices();
+        });
+    </script>
+</body>
+</html>

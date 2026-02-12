@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="calculatorApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Calculator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .calculator-container {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 
+                20px 20px 60px rgba(0, 0, 0, 0.5),
+                -20px -20px 60px rgba(255, 255, 255, 0.05);
+            width: 100%;
+            max-width: 420px;
+        }
+        
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .calculator-header h2 {
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .display-container {
+            background: linear-gradient(145deg, #0f3460, #16213e);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 
+                inset 5px 5px 10px rgba(0, 0, 0, 0.5),
+                inset -5px -5px 10px rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .history {
+            color: #a8b2d1;
+            font-size: 16px;
+            min-height: 24px;
+            text-align: right;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .display {
+            color: #ffffff;
+            font-size: 42px;
+            font-weight: 700;
+            text-align: right;
+            min-height: 50px;
+            word-wrap: break-word;
+            text-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+        
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        button {
+            padding: 22px;
+            font-size: 22px;
+            font-weight: 600;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                5px 5px 15px rgba(0, 0, 0, 0.4),
+                -5px -5px 15px rgba(255, 255, 255, 0.05);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                7px 7px 20px rgba(0, 0, 0, 0.5),
+                -7px -7px 20px rgba(255, 255, 255, 0.08);
+        }
+        
+        button:active {
+            transform: translateY(0);
+            box-shadow: 
+                inset 3px 3px 7px rgba(0, 0, 0, 0.5),
+                inset -3px -3px 7px rgba(255, 255, 255, 0.05);
+        }
+        
+        .btn-number {
+            background: linear-gradient(145deg, #2d3561, #1f2544);
+            color: #ffffff;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .btn-number:hover {
+            background: linear-gradient(145deg, #3d4571, #2f3554);
+            border-color: rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-operator {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: #ffffff;
+            box-shadow: 
+                5px 5px 15px rgba(0, 0, 0, 0.4),
+                -5px -5px 15px rgba(102, 126, 234, 0.2),
+                0 0 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-operator:hover {
+            box-shadow: 
+                7px 7px 20px rgba(0, 0, 0, 0.5),
+                -7px -7px 20px rgba(102, 126, 234, 0.3),
+                0 0 30px rgba(102, 126, 234, 0.5);
+        }
+        
+        .btn-operator.active {
+            background: linear-gradient(145deg, #f093fb, #f5576c);
+            box-shadow: 
+                5px 5px 15px rgba(0, 0, 0, 0.4),
+                0 0 25px rgba(240, 147, 251, 0.6);
+        }
+        
+        .btn-function {
+            background: linear-gradient(145deg, #ffa726, #fb8c00);
+            color: #ffffff;
+            box-shadow: 
+                5px 5px 15px rgba(0, 0, 0, 0.4),
+                0 0 20px rgba(255, 167, 38, 0.3);
+        }
+        
+        .btn-function:hover {
+            box-shadow: 
+                7px 7px 20px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(255, 167, 38, 0.5);
+        }
+        
+        .btn-equals {
+            background: linear-gradient(145deg, #00e676, #00c853);
+            color: #ffffff;
+            grid-column: span 2;
+            box-shadow: 
+                5px 5px 15px rgba(0, 0, 0, 0.4),
+                0 0 20px rgba(0, 230, 118, 0.3);
+        }
+        
+        .btn-equals:hover {
+            box-shadow: 
+                7px 7px 20px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(0, 230, 118, 0.5);
+        }
+        
+        .btn-zero {
+            grid-column: span 2;
+        }
+        
+        .btn-clear {
+            background: linear-gradient(145deg, #ff5252, #f44336);
+            color: #ffffff;
+            box-shadow: 
+                5px 5px 15px rgba(0, 0, 0, 0.4),
+                0 0 20px rgba(255, 82, 82, 0.3);
+        }
+        
+        .btn-clear:hover {
+            box-shadow: 
+                7px 7px 20px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(255, 82, 82, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container" ng-controller="CalculatorController">
+        <div class="calculator-header">
+            <h2>Modern Calculator</h2>
+        </div>
+        
+        <div class="display-container">
+            <div class="history">{{previousOperation}}</div>
+            <div class="display">{{display || '0'}}</div>
+        </div>
+        
+        <div class="buttons-grid">
+            <button class="btn-clear" ng-click="clear()">AC</button>
+            <button class="btn-function" ng-click="toggleSign()">+/-</button>
+            <button class="btn-function" ng-click="percentage()">%</button>
+            <button class="btn-operator" ng-click="setOperation('÷')" ng-class="{active: operation === '÷'}">÷</button>
+            
+            <button class="btn-number" ng-click="appendNumber('7')">7</button>
+            <button class="btn-number" ng-click="appendNumber('8')">8</button>
+            <button class="btn-number" ng-click="appendNumber('9')">9</button>
+            <button class="btn-operator" ng-click="setOperation('×')" ng-class="{active: operation === '×'}">×</button>
+            
+            <button class="btn-number" ng-click="appendNumber('4')">4</button>
+            <button class="btn-number" ng-click="appendNumber('5')">5</button>
+            <button class="btn-number" ng-click="appendNumber('6')">6</button>
+            <button class="btn-operator" ng-click="setOperation('-')" ng-class="{active: operation === '-'}">-</button>
+            
+            <button class="btn-number" ng-click="appendNumber('1')">1</button>
+            <button class="btn-number" ng-click="appendNumber('2')">2</button>
+            <button class="btn-number" ng-click="appendNumber('3')">3</button>
+            <button class="btn-operator" ng-click="setOperation('+')" ng-class="{active: operation === '+'}">+</button>
+            
+            <button class="btn-number btn-zero" ng-click="appendNumber('0')">0</button>
+            <button class="btn-number" ng-click="appendDecimal()">.</button>
+            <button class="btn-equals" ng-click="calculate()">=</button>
+        </div>
+    </div>
+
+    <script>
+        var app = angular.module('calculatorApp', []);
+        
+        app.controller('CalculatorController', function($scope) {
+            $scope.display = '0';
+            $scope.previousValue = null;
+            $scope.operation = null;
+            $scope.previousOperation = '';
+            $scope.shouldResetDisplay = false;
+            
+            $scope.appendNumber = function(number) {
+                if ($scope.shouldResetDisplay) {
+                    $scope.display = number;
+                    $scope.shouldResetDisplay = false;
+                } else {
+                    if ($scope.display === '0') {
+                        $scope.display = number;
+                    } else {
+                        $scope.display += number;
+                    }
+                }
+            };
+            
+            $scope.appendDecimal = function() {
+                if ($scope.shouldResetDisplay) {
+                    $scope.display = '0.';
+                    $scope.shouldResetDisplay = false;
+                } else if ($scope.display.indexOf('.') === -1) {
+                    $scope.display += '.';
+                }
+            };
+            
+            $scope.setOperation = function(op) {
+                if ($scope.previousValue !== null && $scope.operation !== null && !$scope.shouldResetDisplay) {
+                    $scope.calculate();
+                }
+                
+                $scope.previousValue = parseFloat($scope.display);
+                $scope.operation = op;
+                $scope.previousOperation = $scope.display + ' ' + op;
+                $scope.shouldResetDisplay = true;
+            };
+            
+            $scope.calculate = function() {
+                if ($scope.previousValue === null || $scope.operation === null) {
+                    return;
+                }
+                
+                var currentValue = parseFloat($scope.display);
+                var result;
+                
+                switch ($scope.operation) {
+                    case '+':
+                        result = $scope.previousValue + currentValue;
+                        break;
+                    case '-':
+                        result = $scope.previousValue - currentValue;
+                        break;
+                    case '×':
+                        result = $scope.previousValue * currentValue;
+                        break;
+                    case '÷':
+                        if (currentValue === 0) {
+                            $scope.display = 'Error';
+                            $scope.previousValue = null;
+                            $scope.operation = null;
+                            $scope.previousOperation = '';
+                            return;
+                        }
+                        result = $scope.previousValue / currentValue;
+                        break;
+                }
+                
+                $scope.previousOperation = $scope.previousValue + ' ' + $scope.operation + ' ' + currentValue + ' =';
+                $scope.display = result.toString();
+                $scope.previousValue = result;
+                $scope.operation = null;
+                $scope.shouldResetDisplay = true;
+            };
+            
+            $scope.clear = function() {
+                $scope.display = '0';
+                $scope.previousValue = null;
+                $scope.operation = null;
+                $scope.previousOperation = '';
+                $scope.shouldResetDisplay = false;
+            };
+            
+            $scope.toggleSign = function() {
+                if ($scope.display !== '0') {
+                    if ($scope.display.charAt(0) === '-') {
+                        $scope.display = $scope.display.substring(1);
+                    } else {
+                        $scope.display = '-' + $scope.display;
+                    }
+                }
+            };
+            
+            $scope.percentage = function() {
+                var value = parseFloat($scope.display);
+                $scope.display = (value / 100).toString();
+            };
+        });
+    </script>
+</body>
+</html>
