@@ -1,43 +1,55 @@
-# Compiled class files
-*.class
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
 
-# Log files
-*.log
+# Environment variables
+.env
+.env.local
+.env.*.local
 
-# Package Files
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# Virtual machine crash logs
-hs_err_pid*
-
-# IDE specific files
+# IDE
 .vscode/
 .idea/
-*.iml
-*.iws
-
-# OS specific files
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Temporary files
-*.tmp
-*.temp
 *.swp
 *.swo
 *~
 
-# Build directories
-build/
-dist/
-target/
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
 
-# Installation logs
-InstallationLog.txt
+# Build outputs
+dist/
+build/
+*.log
+
+# MongoDB
+*.lock
+
+# Android
+*.apk
+*.ap_
+*.dex
+.gradle/
+local.properties
+*.iml
+.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+
+# Tizen
+.sign/
+.build/
+.tproject
+
+# Temporary files
+*.tmp
+*.temp
+~*

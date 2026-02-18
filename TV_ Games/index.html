@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>TV Games Collection - Tizen TV</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            padding: 60px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 60px;
+        }
+        
+        .header h1 {
+            font-size: 80px;
+            font-weight: bold;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+        
+        .header p {
+            font-size: 28px;
+            opacity: 0.9;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .game-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .game-card.focused {
+            border-color: yellow;
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.25);
+        }
+        
+        .game-icon {
+            font-size: 120px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .game-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .game-description {
+            font-size: 20px;
+            color: rgba(255,255,255,0.9);
+            line-height: 1.5;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-size: 22px;
+            opacity: 0.9;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎮 TV GAMES COLLECTION</h1>
+        <p>Choose your game and have fun!</p>
+    </div>
+    
+    <div class="games-grid" id="gamesGrid">
+        <div class="game-card" data-game="snake-game.html">
+            <span class="game-icon">🐍</span>
+            <div class="game-title">Snake Game</div>
+            <div class="game-description">
+                Classic snake game! Eat food, grow longer, and avoid hitting yourself.
+            </div>
+            <div class="badge">Easy to Learn</div>
+        </div>
+        
+        <div class="game-card" data-game="memory-game.html">
+            <span class="game-icon">🧠</span>
+            <div class="game-title">Memory Game</div>
+            <div class="game-description">
+                Match pairs of emojis! Test your memory and concentration skills.
+            </div>
+            <div class="badge">Brain Training</div>
+        </div>
+        
+        <div class="game-card" data-game="block-puzzle.html">
+            <span class="game-icon">🎮</span>
+            <div class="game-title">Block Puzzle</div>
+            <div class="game-description">
+                Tetris-style puzzle! Arrange falling blocks and clear lines.
+            </div>
+            <div class="badge">Classic Arcade</div>
+        </div>
+        
+        <div class="game-card" data-game="pong-game.html">
+            <span class="game-icon">🏓</span>
+            <div class="game-title">Pong Game</div>
+            <div class="game-description">
+                Classic pong! Control the paddle and beat the AI opponent.
+            </div>
+            <div class="badge">2 Player Ready</div>
+        </div>
+        
+        <div class="game-card" data-game="space-shooter.html">
+            <span class="game-icon">🚀</span>
+            <div class="game-title">Space Shooter</div>
+            <div class="game-description">
+                Shoot asteroids and enemies! Survive as long as you can.
+            </div>
+            <div class="badge">Action Packed</div>
+        </div>
+        
+        <div class="game-card" data-game="quiz-game.html">
+            <span class="game-icon">❓</span>
+            <div class="game-title">Quiz Game</div>
+            <div class="game-description">
+                Test your knowledge! Answer trivia questions and score points.
+            </div>
+            <div class="badge">Educational</div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        Use Arrow Keys (←→↑↓) to navigate | Press OK to select game | Press Back to exit
+    </div>
+    
+    <script>
+        let focusedIndex = 0;
+        const gameCards = document.querySelectorAll('.game-card');
+        
+        // Update focus
+        function updateFocus() {
+            gameCards.forEach((card, index) => {
+                if (index === focusedIndex) {
+                    card.classList.add('focused');
+                } else {
+                    card.classList.remove('focused');
+                }
+            });
+        }
+        
+        // Launch game
+        function launchGame() {
+            const card = gameCards[focusedIndex];
+            const gameUrl = card.dataset.game;
+            
+            if (gameUrl) {
+                window.location.href = gameUrl;
+            }
+        }
+        
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            switch(e.keyCode) {
+                case 37: // Left
+                    if (focusedIndex % 3 > 0) {
+                        focusedIndex--;
+                        updateFocus();
+                    }
+                    break;
+                case 38: // Up
+                    if (focusedIndex >= 3) {
+                        focusedIndex -= 3;
+                        updateFocus();
+                    }
+                    break;
+                case 39: // Right
+                    if (focusedIndex % 3 < 2 && focusedIndex < gameCards.length - 1) {
+                        focusedIndex++;
+                        updateFocus();
+                    }
+                    break;
+                case 40: // Down
+                    if (focusedIndex < gameCards.length - 3) {
+                        focusedIndex += 3;
+                        updateFocus();
+                    }
+                    break;
+                case 13: // OK/Enter
+                    launchGame();
+                    break;
+                case 10009: // Back button
+                case 27: // ESC
+                    if (typeof tizen !== 'undefined') {
+                        tizen.application.getCurrentApplication().exit();
+                    } else {
+                        window.history.back();
+                    }
+                    break;
+            }
+        });
+        
+        // Mouse click support
+        gameCards.forEach((card, index) => {
+            card.addEventListener('click', () => {
+                focusedIndex = index;
+                launchGame();
+            });
+        });
+        
+        // Initialize
+        updateFocus();
+    </script>
+</body>
+</html>

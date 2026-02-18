@@ -1,192 +1,208 @@
-# Windows Services & Process Manager
+# Multi-Platform Projects Collection
 
-A portable web-based application for monitoring and managing Windows services and processes with real-time control capabilities.
+A collection of cross-platform applications and utilities built with modern technologies.
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Java](https://img.shields.io/badge/Java-8%2B-orange.svg)
-![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg)
+## 📦 Projects
 
-## Features
+### 1. Inventory Management System
+**Location:** `inventory-management/`
 
-### 🔧 Service Management
-- View all Windows services in real-time
-- Start/Stop services with one click
-- Filter by status (Running/Stopped/All)
-- Search services by name
-- Real-time statistics dashboard
+Full-featured inventory management system with MongoDB backend.
 
-### 💻 Process Management
-- Monitor all running processes
-- Kill individual or multiple processes
-- Memory usage tracking with color coding
-- Multi-select with checkboxes
-- Sortable columns (Name, PID, Memory, Session)
+**Features:**
+- Product & category management
+- Stock tracking with alerts
+- Advanced filtering & search
+- Excel export
+- Duplicate detection
+- Two modes: Standalone (localStorage) or API-connected (MongoDB)
 
-### 🎨 Modern Web UI
-- Responsive design
-- Dark theme with vibrant colors
-- Real-time updates
-- AngularJS-powered interface
-- No installation required
+**Tech Stack:** Node.js, Express, MongoDB, AngularJS, Bootstrap 5
 
-### 📱 Additional Apps
-- Scientific Calculator
-- Modern Calculator
-- Login Page Templates
-- Tizen TV App (for Samsung Smart TVs)
-
-## Quick Start
-
-### Prerequisites
-- Windows 7 or higher
-- Java JDK 8 or higher
-- Modern web browser (Chrome recommended)
-
-### Installation
-
-1. **Clone the repository**
+**Quick Start:**
 ```bash
-git clone https://github.com/YOUR_USERNAME/windows-services-manager.git
-cd windows-services-manager
+cd inventory-management
+# See README.md for setup instructions
 ```
-
-2. **Check requirements**
-```cmd
-INSTALL.bat
-```
-
-3. **Launch application**
-```cmd
-LAUNCH.bat
-```
-
-That's it! The REST API server will start and web UIs will open automatically in Chrome.
-
-## Manual Setup
-
-If you prefer manual setup:
-
-```cmd
-# Start REST API Server
-cd backend
-javac ServicesRestAPI.java
-java ServicesRestAPI
-
-# Open in browser
-# Navigate to web-ui/device-services-ui.html
-# Navigate to web-ui/process-manager-ui.html
-```
-
-## Project Structure
-
-```
-windows-services-manager/
-├── LAUNCH.bat              # One-click launcher
-├── INSTALL.bat             # Installation checker
-├── backend/                # REST API Server
-│   ├── ServicesRestAPI.java
-│   └── START_SERVER.bat
-├── web-ui/                 # Web Interfaces
-│   ├── device-services-ui.html
-│   ├── process-manager-ui.html
-│   └── angular-login-v2.html
-├── calculators/            # Calculator Applications
-│   ├── calculator-modern.html
-│   └── scientific-calculator.html
-├── java-apps/              # Standalone Java Apps
-│   ├── DeviceServices.java
-│   ├── ProcessManager.java
-│   └── device_services.cpp
-└── docs/                   # Documentation
-    ├── README.md
-    └── DEPLOYMENT.md
-```
-
-## API Endpoints
-
-The REST API server runs on `http://localhost:8080` with the following endpoints:
-
-- `GET /api/services` - Get all Windows services
-- `GET /api/processes` - Get all running processes
-- `POST /api/service/control` - Start/Stop a service
-- `POST /api/process/kill` - Kill a process
-
-## Screenshots
-
-### Device Services Manager
-- Real-time service monitoring
-- Start/Stop controls
-- Search and filter capabilities
-
-### Process Manager
-- Live process list
-- Memory usage tracking
-- Multi-select kill operations
-
-## Deployment
-
-### Portable USB Deployment
-1. Copy entire project folder to USB drive
-2. Run `LAUNCH.bat` on any Windows system
-3. No installation required
-
-### Network Deployment
-1. Copy to network share
-2. Users can run directly from network location
-3. Each user gets their own server instance
-
-See [DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed deployment instructions.
-
-## Security Notes
-
-- **Administrator Privileges**: Required for starting/stopping services and killing processes
-- **Local Only**: Server binds to localhost (127.0.0.1) by default
-- **No External Access**: Not accessible from network
-- **No Data Collection**: All operations are local, no telemetry
-
-## Troubleshooting
-
-### Java Not Found
-Install Java JDK from [Oracle](https://www.oracle.com/java/technologies/downloads/) and add to PATH.
-
-### Port Already in Use
-Kill existing Java process:
-```cmd
-taskkill /F /IM java.exe
-```
-
-### Permission Denied
-Run `LAUNCH.bat` as Administrator (right-click → Run as administrator).
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Built with Java and AngularJS
-- Uses Windows Service Control Manager API
-- Inspired by Windows Task Manager
-
-## Support
-
-For issues, questions, or suggestions, please open an issue on GitHub.
-
-## Version
-
-**Current Version**: 1.0.0  
-**Last Updated**: February 2026
 
 ---
 
-Made with ❤️ for Windows system administrators and developers
+### 2. Android Recipe App
+**Location:** `android-mobile-app/`
+
+Modern Android recipe application with Material Design.
+
+**Features:**
+- Browse 5+ recipes with images
+- Search functionality
+- Category filtering
+- Detailed recipe view with ingredients & instructions
+- Material Design UI
+
+**Tech Stack:** Kotlin, Android SDK, Material Design
+
+**Quick Start:**
+```bash
+cd android-mobile-app
+# See BUILD_INSTRUCTIONS.md for build guide
+```
+
+---
+
+### 3. Tizen TV Manager
+**Location:** `tizen-tv-manager/`
+
+System management application for Samsung Tizen Smart TVs.
+
+**Features:**
+- System information display
+- Real-time system logs
+- Memory & storage monitoring
+- Network information
+- Remote control navigation
+- Background service integration
+
+**Tech Stack:** HTML5, JavaScript, Tizen Web APIs
+
+**Quick Start:**
+```bash
+cd tizen-tv-manager
+# See QUICK_START.md for setup
+```
+
+---
+
+### 4. TV Games Collection
+**Location:** `TV_ Games/`
+
+Collection of games optimized for TV remote control.
+
+**Games Included:**
+- **Snake Game** - Classic snake with remote controls
+- **Memory Game** - Card matching with 3D animations (AngularJS)
+- **Block Puzzle** - Tetris-style puzzle game
+
+**Features:**
+- Remote control support (arrow keys, Enter, Back)
+- 1920x1080 TV optimization
+- Beautiful animations
+- Score tracking
+
+**Tech Stack:** HTML5, JavaScript, AngularJS, CSS3
+
+**Quick Start:**
+```bash
+cd "TV_ Games"
+# Open any .html file in browser
+```
+
+---
+
+## 🚀 Getting Started
+
+Each project has its own README and setup instructions. Navigate to the project folder and follow the documentation.
+
+### Prerequisites by Project
+
+**Inventory Management:**
+- Node.js 16+
+- MongoDB (local or Atlas)
+- npm
+
+**Android Recipe App:**
+- Android Studio
+- JDK 11+
+- Android SDK
+
+**Tizen TV Manager:**
+- Tizen Studio
+- Samsung TV or Emulator
+
+**TV Games:**
+- Modern web browser
+- No installation required
+
+---
+
+## 📁 Project Structure
+
+```
+KIRO_PJT/
+├── inventory-management/      # Inventory system with MongoDB
+├── android-mobile-app/        # Android recipe app
+├── tizen-tv-manager/          # Tizen TV system manager
+├── TV_ Games/                 # TV games collection
+└── README.md                  # This file
+```
+
+---
+
+## 🛠️ Technologies Used
+
+**Backend:**
+- Node.js + Express
+- MongoDB + Mongoose
+
+**Frontend:**
+- AngularJS
+- Bootstrap 5
+- Material Design
+- HTML5 + CSS3
+
+**Mobile:**
+- Kotlin
+- Android SDK
+- Material Design Components
+
+**TV/Embedded:**
+- Tizen Web APIs
+- HTML5 Canvas
+- Remote Control APIs
+
+---
+
+## 📚 Documentation
+
+Each project contains comprehensive documentation:
+
+- **README.md** - Project overview
+- **Setup guides** - Installation instructions
+- **API documentation** - For backend projects
+- **Build guides** - For mobile/TV apps
+- **Troubleshooting** - Common issues
+
+---
+
+## 🎯 Project Status
+
+| Project | Status | Version |
+|---------|--------|---------|
+| Inventory Management | ✅ Production Ready | 1.0.0 |
+| Android Recipe App | ✅ Production Ready | 1.0.0 |
+| Tizen TV Manager | ✅ Production Ready | 1.0.0 |
+| TV Games | ✅ Production Ready | 1.0.0 |
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+---
+
+## 📄 License
+
+Each project may have its own license. See individual project folders for details.
+
+---
+
+## 🔗 Quick Links
+
+- [Inventory Management](./inventory-management/README.md)
+- [Android Recipe App](./android-mobile-app/README.md)
+- [Tizen TV Manager](./tizen-tv-manager/README.md)
+- [TV Games](./TV_%20Games/README.md)
+
+---
+
+**Last Updated:** February 18, 2026
