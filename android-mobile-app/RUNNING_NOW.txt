@@ -1,0 +1,109 @@
+========================================
+  ANDROID RECIPE APP - STARTING NOW
+========================================
+
+STATUS: 🚀 Android Studio is opening...
+
+========================================
+WHAT'S HAPPENING
+========================================
+
+✅ Android Studio is launching
+✅ Project will open automatically
+⏳ Wait for Gradle sync (2-5 minutes)
+
+========================================
+ONCE ANDROID STUDIO OPENS
+========================================
+
+STEP 1: Wait for Gradle Sync
+-----------------------------
+- Look at bottom right corner
+- Wait for "Gradle sync finished" message
+- This may take a few minutes on first open
+
+STEP 2: Select Device
+---------------------
+- Look at top toolbar
+- Click device dropdown
+- Choose:
+  • Emulator (if you have one)
+  • Your phone (if connected via USB)
+
+STEP 3: Run the App
+-------------------
+- Click green Run button (▶️)
+- Or press Shift + F10
+- App will build and launch!
+
+========================================
+DON'T HAVE A DEVICE?
+========================================
+
+Create an Emulator:
+1. Click "Device Manager" (phone icon on right)
+2. Click "Create Device"
+3. Select "Pixel 6"
+4. Choose "Android 13" (download if needed)
+5. Click "Finish"
+6. Run the app!
+
+========================================
+WHAT YOU'LL SEE
+========================================
+
+Main Screen:
+- 5 recipe cards with images
+- Search bar at top
+- Filter menu (top right)
+
+Try These:
+1. Search for "chicken"
+2. Filter by category
+3. Tap a recipe to see details
+4. View ingredients and instructions
+
+========================================
+RECIPES INCLUDED
+========================================
+
+1. 🍝 Spaghetti Carbonara (Italian)
+2. 🍗 Chicken Tikka Masala (Indian)
+3. 🥗 Caesar Salad (Salad)
+4. 🍪 Chocolate Chip Cookies (Dessert)
+5. 🥘 Vegetable Stir Fry (Asian)
+
+========================================
+TROUBLESHOOTING
+========================================
+
+Gradle Sync Failed?
+→ File → Invalidate Caches → Restart
+
+Build Errors?
+→ Build → Clean Project
+→ Build → Rebuild Project
+
+No Device?
+→ Create emulator (see above)
+→ Or connect phone via USB
+
+========================================
+PROJECT LOCATION
+========================================
+
+C:\Users\p.selvaraj\Documents\KIRO_PJT\android-mobile-app
+
+========================================
+NEED HELP?
+========================================
+
+See RUN_APP.md for detailed instructions
+See BUILD_INSTRUCTIONS.md for build guide
+
+========================================
+
+Android Studio is opening...
+Wait for it to load and follow the steps above!
+
+🚀 Happy Coding! 📱

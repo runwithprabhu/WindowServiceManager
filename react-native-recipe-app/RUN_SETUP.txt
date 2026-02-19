@@ -1,0 +1,97 @@
+========================================
+  REACT NATIVE ENVIRONMENT SETUP
+========================================
+
+STEP 1: Run Setup Script
+-------------------------
+
+Open PowerShell and run:
+
+cd C:\Users\p.selvaraj\Documents\KIRO_PJT\react-native-recipe-app
+.\setup-environment.ps1
+
+This will:
+✅ Set ANDROID_HOME environment variable
+✅ Add Android SDK to PATH
+✅ Create android/local.properties
+
+STEP 2: Restart PowerShell
+---------------------------
+
+IMPORTANT: Close and reopen PowerShell to load new environment variables
+
+STEP 3: Verify Setup
+---------------------
+
+Run these commands to verify:
+
+# Check ANDROID_HOME
+echo $env:ANDROID_HOME
+# Should show: C:\Users\p.selvaraj\AppData\Local\Android\Sdk
+
+# Check adb
+adb version
+# Should show: Android Debug Bridge version
+
+# Check emulator
+emulator -list-avds
+# Should list available emulators
+
+STEP 4: Start Emulator
+-----------------------
+
+Option A: Using Android Studio
+1. Open Android Studio
+2. Tools → Device Manager
+3. Start an emulator
+
+Option B: Using Command Line
+emulator -avd Pixel_6_API_33
+
+STEP 5: Run React Native App
+-----------------------------
+
+Terminal 1 - Start Metro:
+cd C:\Users\p.selvaraj\Documents\KIRO_PJT\react-native-recipe-app
+& "C:\Program Files\nodejs\npm.cmd" start
+
+Terminal 2 - Run Android:
+cd C:\Users\p.selvaraj\Documents\KIRO_PJT\react-native-recipe-app
+& "C:\Program Files\nodejs\npm.cmd" run android
+
+========================================
+TROUBLESHOOTING
+========================================
+
+If setup script fails:
+→ Run PowerShell as Administrator
+→ Run: Set-ExecutionPolicy RemoteSigned
+
+If adb not found after restart:
+→ Manually add to PATH in System Settings
+→ Path: C:\Users\p.selvaraj\AppData\Local\Android\Sdk\platform-tools
+
+If build fails:
+→ cd android
+→ .\gradlew clean
+→ cd ..
+→ npm run android
+
+========================================
+QUICK REFERENCE
+========================================
+
+Setup Script:
+.\setup-environment.ps1
+
+Verify:
+echo $env:ANDROID_HOME
+adb version
+
+Run App:
+npm start (Terminal 1)
+npm run android (Terminal 2)
+
+========================================
+
+Ready? Run Step 1 above!
